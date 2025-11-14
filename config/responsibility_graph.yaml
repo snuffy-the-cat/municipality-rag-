@@ -1,0 +1,478 @@
+# Municipality Responsibility Graph
+# Defines 30 interconnected responsibilities for RAG testing
+
+clusters:
+  - name: "Permits Processing"
+    id: "cluster_permits"
+    description: "Building permits, inspections, and related zoning work"
+    shared_resources:
+      contacts:
+        - name: "Sarah Chen"
+          role: "Zoning Manager"
+          email: "sarah.chen@municipality.gov"
+          phone: "555-0123"
+      systems:
+        - name: "PermitTrack"
+          url: "https://internal.municipality.gov/permittrack"
+
+    responsibilities:
+      - id: "res_permit_intake_001"
+        name: "Permit Application Intake"
+        category: "Permits & Licensing"
+        subcategory: "Application Processing"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          downstream:  # What comes after this
+            - id: "res_building_permit_002"
+              connection_type: "feeds_into"
+              connection_description: "Routes complete applications to permit review"
+        indirect_dependencies:
+          - id: "res_fee_processing_026"
+            relationship: "coordinates_with"
+            shared_element: "Payment verification before routing"
+
+      - id: "res_building_permit_002"
+        name: "Residential Building Permit Review"
+        category: "Permits & Licensing"
+        subcategory: "Building Permits"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          upstream:  # What comes before this
+            - id: "res_permit_intake_001"
+              connection_type: "depends_on"
+              connection_description: "Receives applications from intake"
+          downstream:
+            - id: "res_inspection_scheduling_003"
+              connection_type: "feeds_into"
+              connection_description: "Approved permits move to inspection scheduling"
+            - id: "res_zoning_variance_005"
+              connection_type: "may_trigger"
+              connection_description: "Non-compliant applications require variance"
+        indirect_dependencies:
+          - id: "res_fire_inspection_013"
+            relationship: "coordination_required"
+            shared_element: "Fire safety review for certain projects"
+
+      - id: "res_inspection_scheduling_003"
+        name: "Building Inspection Scheduling"
+        category: "Permits & Licensing"
+        subcategory: "Inspections"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "partial"  # Missing: troubleshooting section
+        missing_sections: ["troubleshooting"]
+        direct_dependencies:
+          upstream:
+            - id: "res_building_permit_002"
+              connection_type: "depends_on"
+          downstream:
+            - id: "res_certificate_occupancy_004"
+              connection_type: "feeds_into"
+              connection_description: "Passed inspections lead to certificate issuance"
+
+      - id: "res_certificate_occupancy_004"
+        name: "Certificate of Occupancy Issuance"
+        category: "Permits & Licensing"
+        subcategory: "Certificates"
+        frequency: "weekly"
+        priority_level: "medium"
+        data_completeness: "minimal"  # Only has overview + 3 basic steps
+        missing_sections: ["troubleshooting", "decision_trees", "tips"]
+        direct_dependencies:
+          upstream:
+            - id: "res_inspection_scheduling_003"
+              connection_type: "depends_on"
+
+      - id: "res_zoning_variance_005"
+        name: "Zoning Variance Requests"
+        category: "Zoning"
+        subcategory: "Variances"
+        frequency: "weekly"
+        priority_level: "medium"
+        data_completeness: "full"
+        direct_dependencies:
+          upstream:
+            - id: "res_building_permit_002"
+              connection_type: "triggered_by"
+        indirect_dependencies:
+          - id: "res_commercial_permit_006"
+            relationship: "shared_contact"
+            shared_element: "Sarah Chen handles both residential and commercial zoning"
+
+      - id: "res_commercial_permit_006"
+        name: "Commercial Building Permit Review"
+        category: "Permits & Licensing"
+        subcategory: "Building Permits"
+        frequency: "weekly"
+        priority_level: "high"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_building_permit_002"
+            relationship: "similar_process"
+            shared_element: "Same review workflow, different code requirements"
+          - id: "res_fire_inspection_013"
+            relationship: "coordination_required"
+            shared_element: "Fire marshal review mandatory for commercial"
+
+      - id: "res_demolition_permit_007"
+        name: "Demolition Permit Processing"
+        category: "Permits & Licensing"
+        subcategory: "Special Permits"
+        frequency: "monthly"
+        priority_level: "medium"
+        data_completeness: "partial"  # Missing: tips section
+        missing_sections: ["tips"]
+        indirect_dependencies:
+          - id: "res_building_permit_002"
+            relationship: "related_workflow"
+
+      - id: "res_sign_permit_008"
+        name: "Sign Permit Review"
+        category: "Permits & Licensing"
+        subcategory: "Special Permits"
+        frequency: "weekly"
+        priority_level: "low"
+        data_completeness: "minimal"  # Only basic steps
+        missing_sections: ["troubleshooting", "decision_trees", "tips", "handoff_notes"]
+
+  - name: "Business Licensing"
+    id: "cluster_business"
+    description: "Business licenses, renewals, and commercial permits"
+    shared_resources:
+      contacts:
+        - name: "Maria Rodriguez"
+          role: "Business Licensing Manager"
+          email: "maria.rodriguez@municipality.gov"
+          phone: "555-0145"
+      systems:
+        - name: "BusinessHub"
+          url: "https://internal.municipality.gov/businesshub"
+
+    responsibilities:
+      - id: "res_business_license_009"
+        name: "New Business License Application"
+        category: "Licensing"
+        subcategory: "Business Licenses"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          downstream:
+            - id: "res_business_renewal_010"
+              connection_type: "feeds_into"
+              connection_description: "New licenses enter annual renewal cycle"
+
+      - id: "res_business_renewal_010"
+        name: "Business License Renewal"
+        category: "Licensing"
+        subcategory: "Business Licenses"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          upstream:
+            - id: "res_business_license_009"
+              connection_type: "depends_on"
+              connection_description: "Renewals require active initial license"
+        indirect_dependencies:
+          - id: "res_fee_processing_026"
+            relationship: "coordinates_with"
+            shared_element: "Renewal fee processing"
+
+      - id: "res_food_truck_permit_011"
+        name: "Food Truck Operating Permits"
+        category: "Licensing"
+        subcategory: "Mobile Vendors"
+        frequency: "weekly"
+        priority_level: "medium"
+        data_completeness: "partial"  # Missing: decision_trees section
+        missing_sections: ["decision_trees"]
+        indirect_dependencies:
+          - id: "res_health_inspection_019"
+            relationship: "coordination_required"
+            shared_element: "Health department inspection required"
+
+      - id: "res_special_event_permit_012"
+        name: "Special Event Permits"
+        category: "Licensing"
+        subcategory: "Events"
+        frequency: "weekly"
+        priority_level: "medium"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_noise_complaint_014"
+            relationship: "may_generate"
+            shared_element: "Events can trigger noise complaints"
+
+      - id: "res_fire_inspection_013"
+        name: "Fire Safety Inspection Scheduling"
+        category: "Public Safety"
+        subcategory: "Inspections"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_building_permit_002"
+            relationship: "coordinates_with"
+          - id: "res_commercial_permit_006"
+            relationship: "coordinates_with"
+
+      - id: "res_home_occupation_permit_030"
+        name: "Home Occupation Permits"
+        category: "Licensing"
+        subcategory: "Special Permits"
+        frequency: "monthly"
+        priority_level: "low"
+        data_completeness: "minimal"
+        missing_sections: ["troubleshooting", "tips", "decision_trees"]
+
+  - name: "Code Enforcement & Public Services"
+    id: "cluster_enforcement"
+    description: "Complaint handling, violations, and public service requests"
+    shared_resources:
+      contacts:
+        - name: "James Martinez"
+          role: "Code Enforcement Officer"
+          email: "james.martinez@municipality.gov"
+          phone: "555-0178"
+
+    responsibilities:
+      - id: "res_noise_complaint_014"
+        name: "Noise Complaint Investigation"
+        category: "Code Enforcement"
+        subcategory: "Complaints"
+        frequency: "daily"
+        priority_level: "medium"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_code_violation_015"
+            relationship: "may_escalate_to"
+            shared_element: "Repeated violations become formal citations"
+
+      - id: "res_code_violation_015"
+        name: "Code Violation Enforcement"
+        category: "Code Enforcement"
+        subcategory: "Violations"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"  # This one has extensive troubleshooting others can reference
+        indirect_dependencies:
+          - id: "res_noise_complaint_014"
+            relationship: "triggered_by"
+
+      - id: "res_tree_removal_permit_016"
+        name: "Tree Removal Permits"
+        category: "Environmental"
+        subcategory: "Permits"
+        frequency: "weekly"
+        priority_level: "medium"
+        data_completeness: "partial"  # Missing: handoff_notes section
+        missing_sections: ["handoff_notes"]
+
+      - id: "res_sidewalk_repair_017"
+        name: "Sidewalk Repair Requests"
+        category: "Public Works"
+        subcategory: "Infrastructure"
+        frequency: "daily"
+        priority_level: "medium"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_pothole_repair_018"
+            relationship: "similar_workflow"
+            shared_element: "Both use work order system"
+
+      - id: "res_pothole_repair_018"
+        name: "Pothole Repair Requests"
+        category: "Public Works"
+        subcategory: "Infrastructure"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "partial"  # Missing: tips section
+        missing_sections: ["tips"]
+        indirect_dependencies:
+          - id: "res_sidewalk_repair_017"
+            relationship: "similar_workflow"
+
+      - id: "res_health_inspection_019"
+        name: "Food Service Health Inspections"
+        category: "Public Safety"
+        subcategory: "Inspections"
+        frequency: "weekly"
+        priority_level: "high"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_food_truck_permit_011"
+            relationship: "coordinates_with"
+          - id: "res_business_license_009"
+            relationship: "prerequisite_for"
+            shared_element: "Health inspection required before business license"
+
+      - id: "res_animal_license_020"
+        name: "Dog License Registration"
+        category: "Licensing"
+        subcategory: "Animal Control"
+        frequency: "daily"
+        priority_level: "low"
+        data_completeness: "minimal"  # Very basic
+        missing_sections: ["troubleshooting", "decision_trees", "tips"]
+
+      - id: "res_parking_appeal_021"
+        name: "Parking Ticket Appeals"
+        category: "Public Services"
+        subcategory: "Appeals"
+        frequency: "daily"
+        priority_level: "medium"
+        data_completeness: "full"
+
+  - name: "Utilities & Infrastructure"
+    id: "cluster_utilities"
+    description: "Water, sewer, and infrastructure services"
+    shared_resources:
+      contacts:
+        - name: "Robert Chen"
+          role: "Utilities Manager"
+          email: "robert.chen@municipality.gov"
+          phone: "555-0189"
+      systems:
+        - name: "UtilityConnect"
+          url: "https://internal.municipality.gov/utilityconnect"
+
+    responsibilities:
+      - id: "res_water_connection_022"
+        name: "Water Service Connection Applications"
+        category: "Utilities"
+        subcategory: "Water"
+        frequency: "weekly"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          downstream:
+            - id: "res_sewer_connection_023"
+              connection_type: "often_paired_with"
+              connection_description: "Usually applied for together"
+
+      - id: "res_sewer_connection_023"
+        name: "Sewer Connection Applications"
+        category: "Utilities"
+        subcategory: "Sewer"
+        frequency: "weekly"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          upstream:
+            - id: "res_water_connection_022"
+              connection_type: "often_paired_with"
+
+      - id: "res_hydrant_permit_024"
+        name: "Fire Hydrant Use Permits"
+        category: "Utilities"
+        subcategory: "Special Use"
+        frequency: "monthly"
+        priority_level: "low"
+        data_completeness: "partial"  # Missing: troubleshooting
+        missing_sections: ["troubleshooting"]
+
+      - id: "res_street_closure_025"
+        name: "Street Closure Permits"
+        category: "Public Works"
+        subcategory: "Permits"
+        frequency: "weekly"
+        priority_level: "high"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_special_event_permit_012"
+            relationship: "coordinates_with"
+            shared_element: "Events often require street closures"
+
+  - name: "Finance & Administration"
+    id: "cluster_finance"
+    description: "Payment processing, fees, budgets, and administrative tasks"
+    shared_resources:
+      contacts:
+        - name: "Linda Park"
+          role: "Finance Director"
+          email: "linda.park@municipality.gov"
+          phone: "555-0156"
+      systems:
+        - name: "FinanceHub"
+          url: "https://internal.municipality.gov/financehub"
+
+    responsibilities:
+      - id: "res_fee_processing_026"
+        name: "Permit Fee Processing"
+        category: "Finance"
+        subcategory: "Revenue"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        indirect_dependencies:
+          - id: "res_permit_intake_001"
+            relationship: "coordinates_with"
+          - id: "res_business_renewal_010"
+            relationship: "coordinates_with"
+          - id: "res_payment_collection_027"
+            relationship: "feeds_into"
+
+      - id: "res_payment_collection_027"
+        name: "Payment Collection and Receipt"
+        category: "Finance"
+        subcategory: "Revenue"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "full"
+        direct_dependencies:
+          downstream:
+            - id: "res_accounting_reconciliation_028"
+              connection_type: "feeds_into"
+              connection_description: "Daily payments sent to accounting for reconciliation"
+
+      - id: "res_accounting_reconciliation_028"
+        name: "Daily Accounting Reconciliation"
+        category: "Finance"
+        subcategory: "Accounting"
+        frequency: "daily"
+        priority_level: "high"
+        data_completeness: "minimal"  # Only 2-3 steps
+        missing_sections: ["troubleshooting", "decision_trees", "tips", "handoff_notes"]
+        direct_dependencies:
+          upstream:
+            - id: "res_payment_collection_027"
+              connection_type: "depends_on"
+
+      - id: "res_budget_reporting_029"
+        name: "Monthly Budget Reporting"
+        category: "Finance"
+        subcategory: "Reporting"
+        frequency: "monthly"
+        priority_level: "medium"
+        data_completeness: "partial"  # Missing: tips and troubleshooting
+        missing_sections: ["tips", "troubleshooting"]
+
+# Summary Statistics
+statistics:
+  total_responsibilities: 30
+
+  by_completeness:
+    full: 17        # ~57%
+    partial: 9      # ~30%
+    minimal: 4      # ~13%
+
+  by_cluster:
+    permits: 8
+    business: 6
+    enforcement: 8
+    utilities: 4
+    finance: 4
+
+  dependency_types:
+    direct_upstream: 12
+    direct_downstream: 12
+    indirect: 35
+
+  shared_resources:
+    contacts: 5
+    systems: 4

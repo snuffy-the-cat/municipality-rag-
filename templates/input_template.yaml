@@ -1,0 +1,184 @@
+# Municipal Departure Documentation Template
+# Pure YAML structure - fully machine-readable
+
+metadata:
+  # Identity
+  responsibility_id: ""  # Unique identifier (e.g., "res_building_permit_residential_001")
+  responsibility_name: ""  # Clear, descriptive name
+  category: ""  # Main category (e.g., "Permits & Licensing", "Public Relations")
+  subcategory: ""  # More specific category
+  department: ""  # Department name
+
+  # Scheduling & Priority
+  frequency: ""  # Options: daily/weekly/monthly/quarterly/annual/ad-hoc
+  time_commitment: ""  # Estimate (e.g., "2-4 hours per day")
+  priority_level: ""  # Options: high/medium/low
+  seasonal_variations: ""  # Describe seasonal patterns
+
+  # Relationships
+  related_responsibilities: []  # List of related responsibility IDs
+  prerequisites: []  # What should be learned first
+
+  # Attribution
+  documented_by:
+    name: ""
+    email: ""
+    role: ""
+    departure_date: ""  # Format: YYYY-MM-DD
+    years_in_role: 0
+
+  # Versioning
+  version: 1
+  effective_date: ""  # Format: YYYY-MM-DD
+  status: "active"  # Options: active/superseded/under_review
+  replaces_document: null
+  document_type: "departure_documentation"
+
+  # Key Resources
+  systems:
+    - name: ""
+      url: ""
+      purpose: ""
+      login_method: ""
+
+  key_contacts:
+    - name: ""
+      role: ""
+      email: ""
+      phone: ""
+      when_to_contact: ""
+
+  important_documents:
+    - title: ""
+      url: ""
+      type: ""  # Options: form/reference/guide/template/policy
+
+# Core Content
+overview:
+  what: ""  # What is this responsibility? (2-3 sentences)
+  why: ""  # Why does it matter? Impact and importance
+  when:
+    frequency: ""  # How often does this occur?
+    turnaround_target: ""  # Expected completion timeframe
+    triggers: ""  # What initiates this work?
+
+# Procedural Steps
+steps:
+  - step_number: 1
+    name: ""  # Action name
+    what_to_do:
+      - ""  # Step-by-step actions (list items)
+    tools_needed: []  # List of required tools/systems
+    common_issues:
+      - issue: ""
+        solution: ""
+    decision_points:
+      - condition: ""  # If this happens...
+        action: ""  # Do this
+        contact: ""  # Who to contact (optional)
+    tips: []  # List of helpful shortcuts/context
+    time_estimate: ""  # Duration
+
+  - step_number: 2
+    name: ""
+    what_to_do: []
+    tools_needed: []
+    common_issues: []
+    decision_points: []
+    tips: []
+    time_estimate: ""
+
+  # Add more steps as needed
+
+# Decision Trees & Special Cases
+decision_trees:
+  - title: ""
+    condition: ""  # What to evaluate
+    outcomes:
+      - scenario: ""  # Condition
+        action: ""  # What to do
+    additional_info: ""  # Context or clarifications
+
+special_cases:
+  - title: ""
+    when_applies: ""  # Conditions or triggers
+    what_to_do_differently: []  # Steps
+    key_contact: ""  # Name and contact info
+
+# Troubleshooting
+troubleshooting:
+  - problem: ""  # Problem name/description
+    symptoms: ""  # How to recognize
+    solution: []  # Steps to resolve (list)
+    escalation: ""  # When/who to escalate to
+    tips: ""  # Optional: additional context
+
+# Resources
+resources:
+  essential_systems:
+    - name: ""
+      url: ""
+      description: ""
+
+  key_documents:
+    - name: ""
+      location: ""  # URL or file path
+      description: ""
+
+  forms:
+    - name: ""
+      form_id: ""
+      description: ""
+
+  training_materials:
+    - name: ""
+      location: ""
+      duration: ""  # Optional
+
+  legal_references:
+    - name: ""
+      url: ""
+
+# Tips & Tribal Knowledge
+tribal_knowledge:
+  things_to_know_day_one: []  # List of key insights
+
+  common_mistakes: []  # List of mistakes to avoid
+
+  seasonal_patterns:
+    - period: ""  # Season or time period
+      description: ""  # What to expect
+
+  rule_flexibility:
+    - scenario: ""
+      flexibility: ""  # What discretion exists
+    never_bend_on: []  # Non-negotiable areas
+
+# Personal Handoff
+handoff_notes:
+  personal_reflection: ""  # How long in role, learnings, enjoyment
+
+  personal_workflow:
+    - time_of_day: ""
+      work_type: ""
+      reasoning: ""
+
+  people_you_will_work_with:
+    - name: ""
+      role: ""
+      insights: ""  # Personality, working style, collaboration tips
+
+  biggest_mistakes:
+    - mistake: ""
+      lesson: ""
+
+  what_i_will_miss: ""
+
+  final_advice: ""
+
+  contact_for_followup: ""  # Optional: personal email for questions
+
+# Document Metadata
+document_info:
+  version: ""
+  last_updated: ""  # YYYY-MM-DD

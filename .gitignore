@@ -1,0 +1,253 @@
+# Municipality RAG - Git Ignore File
+
+# ============================================================================
+# SENSITIVE FILES - NEVER COMMIT
+# ============================================================================
+
+# Environment variables and API keys
+.env
+*.key
+secrets.yaml
+secrets.json
+
+# ============================================================================
+# GENERATED DATA - DO NOT COMMIT
+# ============================================================================
+
+# Generated documents (keep preprocessed, ignore original generated)
+data/generated/
+data/manual/*
+data/source/*
+
+# Keep preprocessed files (these are the cleaned versions we want to commit)
+!data/preprocessed/
+!data/preprocessed/**
+
+# Keep directory structure but ignore contents
+!data/generated/.gitkeep
+!data/manual/.gitkeep
+!data/source/.gitkeep
+
+# Databases (ChromaDB files are heavy - can be rebuilt from preprocessed files)
+database/
+database/chroma/
+database/chroma_db/
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Keep directory but not contents
+!database/.gitkeep
+!database/chroma_db/.gitkeep
+
+# Logs and outputs
+outputs/logs/*
+outputs/reports/*
+outputs/exports/*
+
+# Keep directory structure
+!outputs/logs/.gitkeep
+!outputs/reports/.gitkeep
+!outputs/exports/.gitkeep
+
+# ============================================================================
+# PYTHON
+# ============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# ============================================================================
+# JUPYTER NOTEBOOKS
+# ============================================================================
+
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Jupyter Notebook
+*.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# ============================================================================
+# OPERATING SYSTEM
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================================
+# OTHER
+# ============================================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Large model files (if downloading models locally)
+*.bin
+*.gguf
+*.pt
+*.pth
+*.safetensors
+models/
+
+# Node modules (if using any JS tools)
+node_modules/
+
+# ============================================================================
+# PROJECT SPECIFIC
+# ============================================================================
+
+# Large generated datasets
+*.parquet
+*.arrow
+*.feather
+
+# Experiment tracking
+mlruns/
+wandb/
+
+# Temporary test files
+test_output/
+scratch/
+temp/
