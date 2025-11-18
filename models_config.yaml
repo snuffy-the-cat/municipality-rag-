@@ -1,0 +1,90 @@
+# Model Configuration for Document Generation
+# Allows easy switching between different LLM models
+
+# Active model selection
+active_model:
+  english: "llama3.1"
+  hebrew: "llama3.1"  # Change to: qwen2.5:7b, mistral-nemo, aya:8b after testing
+
+# Available models and their configurations
+models:
+  llama3.1:
+    name: "Llama 3.1"
+    description: "Meta's Llama 3.1 - good general purpose model"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["en", "he", "multi"]
+    size: "8B"
+
+  "qwen2.5:7b":
+    name: "Qwen 2.5 (7B)"
+    description: "Alibaba's Qwen 2.5 - excellent multilingual including Hebrew"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["multi", "he"]
+    size: "7B"
+    recommended_for: "hebrew"
+
+  "qwen2.5:14b":
+    name: "Qwen 2.5 (14B)"
+    description: "Larger Qwen model - better quality, slower"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["multi", "he"]
+    size: "14B"
+    recommended_for: "hebrew_quality"
+
+  mistral-nemo:
+    name: "Mistral-Nemo"
+    description: "Mistral's multilingual model - balanced performance"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["multi", "he"]
+    size: "12B"
+
+  "aya:8b":
+    name: "Aya (8B)"
+    description: "Cohere's multilingual specialist - designed for 100+ languages"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["multi", "he"]
+    size: "8B"
+    recommended_for: "hebrew"
+
+  "aya:35b":
+    name: "Aya (35B)"
+    description: "Larger Aya model - best multilingual quality"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["multi", "he"]
+    size: "35B"
+    recommended_for: "hebrew_quality_powerful_hardware"
+
+  "gemma2:9b":
+    name: "Gemma 2 (9B)"
+    description: "Google's Gemma 2 - good multilingual support"
+    temperature: 0.7
+    num_predict: 6000
+    languages: ["multi", "he"]
+    size: "9B"
+
+# Output directories per model (for comparison testing)
+output_dirs:
+  llama3.1: "markdown-hebrew"
+  "qwen2.5:7b": "markdown-hebrew-qwen"
+  mistral-nemo: "markdown-hebrew-mistral"
+  "aya:8b": "markdown-hebrew-aya"
+  "gemma2:9b": "markdown-hebrew-gemma"
+
+# Model selection notes
+notes: |
+  To change the active model:
+  1. Edit the 'active_model' section above
+  2. For Hebrew: Choose qwen2.5:7b, aya:8b, or mistral-nemo for best results
+  3. For English: llama3.1 works well
+  4. Make sure the model is installed: ollama pull <model-name>
+
+  Recommended Hebrew models (in order):
+  1. qwen2.5:7b - Best balance of quality and speed
+  2. aya:8b - Multilingual specialist
+  3. mistral-nemo - Good general performance

@@ -18,6 +18,7 @@ secrets.json
 data/generated/
 data/manual/*
 data/source/*
+data/
 
 # Keep preprocessed files (these are the cleaned versions we want to commit)
 !data/preprocessed/
@@ -41,12 +42,12 @@ database/*.sqlite3
 !database/chroma_db/.gitkeep
 
 # Logs and outputs
-outputs/logs/*
+logs/*
 outputs/reports/*
 outputs/exports/*
 
 # Keep directory structure
-!outputs/logs/.gitkeep
+!logs/.gitkeep
 !outputs/reports/.gitkeep
 !outputs/exports/.gitkeep
 

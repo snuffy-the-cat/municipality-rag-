@@ -1,232 +1,218 @@
-# Municipality Knowledge Transfer System - RAG POC
+# Municipality Knowledge Transfer System - RAG
 
-A proof-of-concept RAG (Retrieval-Augmented Generation) system for capturing and querying municipal employee knowledge during transitions.
+A RAG (Retrieval-Augmented Generation) system for capturing and querying municipal employee knowledge during transitions.
+
+---
 
 ## 🎯 Project Goal
 
-Build a system where departing municipal employees document their responsibilities in a structured format, and new employees can query this knowledge base using natural language questions.
+Build a system where departing municipal employees document their responsibilities in a structured format, and new employees can query this knowledge base using natural language questions in Hebrew.
 
-## 📋 Features
+---
 
-- **Structured Documentation**: Standardized templates for capturing procedural knowledge
-- **Dependency Tracking**: Links between related responsibilities and shared resources
-- **Vector Search**: Semantic search using embeddings to find relevant information
-- **LLM Synthesis**: Coherent answers with source attribution
-- **30 Sample Documents**: Pre-generated municipal responsibilities for testing
-
-## 🏗️ Architecture
+## 🏗️ System Architecture - 3 Stages
 
 ```
-Input Documents → Indexing → Vector DB → Semantic Search → LLM Synthesis → Answer
-     (Markdown)    (Chunks)   (ChromaDB)   (Embeddings)      (Ollama/GPT)
+Stage 1: DATA CREATION
+    Input files (.md) → Generated via LLM (POC) OR Real employee input (Production)
+    ↓
+Stage 2: DATA PROCESSING
+    Raw .md → YAML fixes → Validation → Chunking → Vector DB
+    ↓
+Stage 3: DATA QUERYING
+    User question → Semantic search → LLM synthesis → Answer with sources
 ```
+
+---
 
 ## 📁 Project Structure
 
 ```
 municipality-rag/
-├── config/                  # Configuration files
-│   └── responsibility_graph.yaml
-├── templates/               # Document templates
-├── data/                   # Generated documents
-├── scripts/                # Generation scripts
-├── rag_system/             # RAG implementation
-├── database/               # Vector database
-└── tests/                  # Test files
+│
+├── config/                          # Global configuration
+│   └── models_config.yaml           # LLM model settings (all stages)
+│
+├── 1_data_creation/                 # STAGE 1: Create input data
+│   ├── config/
+│   │   ├── responsibility_graph.yaml          # English POC definitions
+│   │   └── responsibility_graph_hebrew.yaml   # Hebrew POC definitions
+│   └── scripts/
+│       ├── generate_documents.py              # Generate English docs (POC)
+│       └── generate_documents_hebrew.py       # Generate Hebrew docs (POC)
+│
+├── 2_data_processing/               # STAGE 2: Process data → Vector DB
+│   ├── core/                        # Core processing modules
+│   │   ├── parser.py                # Extract YAML + markdown
+│   │   ├── yaml_fixer.py            # Fix broken YAML
+│   │   ├── chunker.py               # Split by semantic sections
+│   │   ├── validator.py             # Validate chunks
+│   │   └── core.md                  # Module documentation
+│   ├── scripts/                     # Processing pipeline scripts
+│   │   ├── preprocessing.py         # Apply YAML fixes
+│   │   ├── validate_preprocessed.py # Verify quality
+│   │   ├── indexing.py              # Index to ChromaDB
+│   │   └── scripts.md               # Script documentation
+│   └── templates/                   # Validation templates
+│       ├── input_template_english.md
+│       └── input_template_hebrew.md
+│
+├── 3_data_querying/                 # STAGE 3: Query system
+│   └── query_system.py              # Interactive Q&A
+│
+├── data/                            # Data storage
+│   ├── raw/                         # Input .md files (before processing)
+│   ├── processed/                   # YAML-fixed .md files (ready for indexing)
+│   └── generated/                   # POC-generated files (temporary)
+│
+├── database/                        # Vector database
+│   └── chroma/                      # ChromaDB storage
+│
+├── logs/                            # System logs
+│   ├── indexing_*.log               # Text logs
+│   └── indexing_*.jsonl             # Structured JSON logs
+│
+└── old/                             # One-time helpers (not continuous use)
 ```
-
-See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for detailed layout.
-
-## 🚀 Quick Start
-
-### 1. Setup Environment
-
-```bash
-# Clone or navigate to project
-cd municipality-rag
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On Mac/Linux:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Install Ollama (Free Local LLM)
-
-**Option A: Download from website**
-- Visit: https://ollama.ai
-- Download for your OS
-- Install and run
-
-**Option B: Command line**
-```bash
-# Mac/Linux
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Windows
-# Use installer from website
-```
-
-**Download a model:**
-```bash
-ollama pull llama3.1
-```
-
-### 3. Generate Documents
-
-```bash
-# Generate all 30 documents from the responsibility graph
-python scripts/generate_documents.py
-
-# Output: data/generated/markdown/*.md
-```
-
-### 4. Index Documents
-
-```bash
-# Create vector database
-python rag_system/indexing.py
-
-# Output: database/chroma_db/
-```
-
-### 5. Query the System
-
-```bash
-# CLI interface
-python rag_system/query_system.py
-
-# OR Web UI
-streamlit run rag_system/app.py
-```
-
-## 💡 Example Queries
-
-- "How do I process a building permit?"
-- "Who do I contact about zoning issues?"
-- "What systems do I need access to for permit intake?"
-- "What happens if a permit application is incomplete?"
-- "How are building permits and inspections connected?"
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest tests/
-
-# Test RAG retrieval quality
-python tests/test_rag_retrieval.py
-
-# Test dependency connections
-python tests/test_dependencies.py
-```
-
-## 📊 Sample Data
-
-The project includes 30 pre-defined responsibilities organized in 5 clusters:
-
-1. **Permits Processing** (8 docs) - Building permits, inspections, certificates
-2. **Business Licensing** (6 docs) - Business licenses, food trucks, events
-3. **Code Enforcement** (8 docs) - Complaints, violations, public services
-4. **Utilities** (4 docs) - Water, sewer, infrastructure
-5. **Finance** (4 docs) - Fees, payments, accounting
-
-Data completeness varies to test RAG robustness:
-- 57% fully complete
-- 30% partially complete (missing 1-2 sections)
-- 13% minimally complete (basic info only)
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Copy `.env.example` to `.env` and configure:
-
-```bash
-# Optional: If using OpenAI instead of Ollama
-OPENAI_API_KEY=your_key_here
-
-# Optional: If using Anthropic Claude
-ANTHROPIC_API_KEY=your_key_here
-```
-
-### Generation Settings
-
-Edit `config/generation_config.yaml` to adjust:
-- LLM backend (ollama/openai/anthropic)
-- Model name
-- Temperature
-- Output format
-
-## 📖 Documentation
-
-- [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - Detailed project organization
-- [general_guidelines.md](general_guidelines.md) - Implementation guidelines
-- `docs/setup_guide.md` - Setup instructions (coming soon)
-- `docs/generation_guide.md` - Document generation guide (coming soon)
-
-## 🛠️ Technology Stack
-
-| Component | Technology | Why |
-|-----------|-----------|-----|
-| Embeddings | OpenAI text-embedding-3-small | High quality, low cost |
-| Vector DB | ChromaDB | Simple, local, free |
-| LLM | Ollama (Llama 3.1) | Free, private, local |
-| Framework | LangChain | Standard RAG toolkit |
-| UI | Streamlit | Quick web interface |
-| Storage | Markdown + YAML | Human-readable, versionable |
-
-## 💰 Cost Estimate
-
-**Using Ollama (Recommended):**
-- Generation: $0 (local)
-- Indexing: $0 (local)
-- Queries: $0 (local)
-- **Total: FREE**
-
-**Using OpenAI:**
-- Generation: ~$1-2 (30 docs)
-- Indexing: ~$0.01
-- Queries: ~$0.07 each
-- **Total: ~$2-5 for POC**
-
-## 🎯 POC Success Criteria
-
-- ✅ Generate 30 interconnected documents
-- ✅ Index into vector database
-- ✅ Answer natural language queries
-- ✅ Retrieve related responsibilities
-- ✅ Handle incomplete data gracefully
-- ✅ Provide source attribution
-
-## 🔮 Future Enhancements
-
-- Document versioning and deprecation
-- Conflict detection between documents
-- User feedback collection
-- Query analytics
-- Role-based access control
-- Integration with existing municipal systems
-
-## 📝 License
-
-[Add your license here]
-
-## 🤝 Contributing
-
-This is a POC project. Contributions and suggestions welcome!
-
-## 📧 Contact
-
-[Add contact information]
 
 ---
 
-**Note:** This is a proof-of-concept system for testing RAG capabilities. Not production-ready.
+## 🚀 Quick Start
+
+### **Stage 1: Data Creation (POC)**
+
+```bash
+# Generate Hebrew documents using configured model
+python 1_data_creation/scripts/generate_documents_hebrew.py
+
+# Output: data/generated/markdown-hebrew/*.md
+```
+
+### **Stage 2: Data Processing**
+
+```bash
+# Step 1: Fix YAML in raw documents
+python 2_data_processing/scripts/preprocessing.py
+# Input:  data/raw/*.md
+# Output: data/processed/*.md
+
+# Step 2: Validate processed documents
+python 2_data_processing/scripts/validate_preprocessed.py
+# Input:  data/processed/*.md
+# Output: Console report
+
+# Step 3: Index to vector database
+python 2_data_processing/scripts/indexing.py
+# Input:  data/processed/*.md
+# Output: database/chroma/
+```
+
+### **Stage 3: Querying**
+
+```bash
+# Interactive Q&A
+python 3_data_querying/query_system.py
+```
+
+---
+
+## 📊 Data Formats & Flow
+
+| Stage | Input Format | Output Format | Location |
+|-------|-------------|---------------|----------|
+| **1. Creation** | responsibility_graph.yaml | .md with YAML frontmatter | data/generated/ |
+| **2. Processing** | Raw .md files | ChromaDB vector database | database/chroma/ |
+| **3. Querying** | User question (text) | Answer + sources (text) | Console/UI |
+
+### **Data Flow:**
+
+```
+responsibility_graph_hebrew.yaml
+    ↓
+generate_documents_hebrew.py
+    ↓
+data/raw/*.md (raw input)
+    ↓
+preprocessing.py (YAML fixes via yaml_fixer.py)
+    ↓
+data/processed/*.md (clean YAML)
+    ↓
+validate_preprocessed.py (quality check)
+    ↓
+indexing.py (parser → chunker → validator → ChromaDB)
+    ↓
+database/chroma/ (vector DB)
+    ↓
+query_system.py
+    ↓
+User gets answer with sources
+```
+
+---
+
+## 🔧 Configuration
+
+### **Models Configuration** (`config/models_config.yaml`)
+
+Choose which LLM model to use for Hebrew generation:
+
+```yaml
+active_model:
+  hebrew: "qwen2.5:7b"  # Options: llama3.1, qwen2.5:7b, mistral-nemo, aya:8b
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **LLM** | Ollama (Qwen/Mistral/Aya) | Hebrew document generation |
+| **Vector DB** | ChromaDB | Semantic search |
+| **Embeddings** | ChromaDB default | Multilingual support |
+| **Framework** | Custom pipeline | Modular processing |
+| **Storage** | Markdown + YAML | Human-readable, versionable |
+
+---
+
+## 📖 Documentation
+
+- **2_data_processing/core/core.md** - Core module documentation (input/output)
+- **2_data_processing/scripts/scripts.md** - Processing scripts documentation
+- **PROJECT_STRUCTURE.md** - Detailed project structure
+- **STATUS.md** - Current status and roadmap
+
+---
+
+## 🎯 Current Status
+
+- ✅ English system complete (30 documents)
+- ✅ Hebrew models installed (Qwen, Mistral, Aya)
+- 🔄 Hebrew model comparison in progress (3×5 documents)
+- ⏳ Hebrew full system (15 documents) - pending
+- ⏳ Production validation templates - pending
+
+---
+
+## 🔮 Production vs POC
+
+### **POC (Current):**
+- Documents generated by LLM from responsibility graphs
+- Used for testing and development
+- Located in `data/generated/`
+
+### **Production (Future):**
+- Real employee input via forms/templates
+- Validated against templates in `2_data_processing/templates/`
+- Stored in `data/raw/` → processed → indexed
+- Same processing pipeline as POC
+
+---
+
+## 📝 License
+
+[Add your license]
+
+---
+
+**Note:** This is a research system for Hebrew municipal knowledge transfer.
