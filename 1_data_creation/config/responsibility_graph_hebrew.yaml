@@ -22,29 +22,59 @@ clusters:
           url: "https://business.city.gov.il"
 
     responsibilities:
-      - id: "res_building_permit_001"
+      - id: "res_building_permit"
         name: "טיפול בבקשות להיתר בנייה"
         category: "רישוי והנדסה"
         subcategory: "היתרי בנייה"
         frequency: "יומי"
         priority_level: "גבוהה"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: mistral
+            min_completeness: 80
+          - doc_id: 2
+            model: qwen
+            min_completeness: 85
+          - doc_id: 3
+            model: aya
+            min_completeness: 80
 
-      - id: "res_business_license_002"
+      - id: "res_business_license"
         name: "רישוי עסקים"
         category: "רישוי והנדסה"
         subcategory: "רישיונות עסק"
         frequency: "שבועי"
         priority_level: "בינונית"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: aya
+            min_completeness: 80
+          - doc_id: 2
+            model: mistral
+            min_completeness: 85
+          - doc_id: 3
+            model: qwen
+            min_completeness: 80
 
-      - id: "res_planning_committee_003"
+      - id: "res_planning_committee"
         name: "ועדת תכנון ובנייה"
         category: "רישוי והנדסה"
         subcategory: "ועדות"
         frequency: "חודשי"
         priority_level: "גבוהה"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: qwen
+            min_completeness: 80
+          - doc_id: 2
+            model: aya
+            min_completeness: 85
+          - doc_id: 3
+            model: mistral
+            min_completeness: 80
 
   - name: "רווחה ושירותים חברתיים"
     id: "cluster_welfare"
@@ -60,21 +90,41 @@ clusters:
           url: "https://welfare.city.gov.il"
 
     responsibilities:
-      - id: "res_elderly_services_004"
+      - id: "res_elderly_services"
         name: "שירותים לאזרח הוותיק"
         category: "רווחה"
         subcategory: "קשישים"
         frequency: "יומי"
         priority_level: "גבוהה"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: mistral
+            min_completeness: 80
+          - doc_id: 2
+            model: qwen
+            min_completeness: 85
+          - doc_id: 3
+            model: aya
+            min_completeness: 80
 
-      - id: "res_youth_programs_005"
+      - id: "res_youth_programs"
         name: "תכניות נוער ונוער בסיכון"
         category: "רווחה"
         subcategory: "נוער"
         frequency: "שבועי"
         priority_level: "בינונית"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: mistral
+            min_completeness: 85
+          - doc_id: 2
+            model: aya
+            min_completeness: 80
+          - doc_id: 3
+            model: qwen
+            min_completeness: 80
 
   - name: "חינוך ותרבות"
     id: "cluster_education"
@@ -90,21 +140,41 @@ clusters:
           url: "https://education.city.gov.il"
 
     responsibilities:
-      - id: "res_school_registration_006"
+      - id: "res_school_registration"
         name: "רישום לבתי ספר עירוניים"
         category: "חינוך"
         subcategory: "רישום תלמידים"
         frequency: "עונתי"
         priority_level: "גבוהה"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: qwen
+            min_completeness: 85
+          - doc_id: 2
+            model: mistral
+            min_completeness: 80
+          - doc_id: 3
+            model: aya
+            min_completeness: 80
 
-      - id: "res_cultural_events_007"
+      - id: "res_cultural_events"
         name: "ארגון אירועי תרבות"
         category: "תרבות"
         subcategory: "אירועים"
         frequency: "שבועי"
         priority_level: "בינונית"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: aya
+            min_completeness: 80
+          - doc_id: 2
+            model: mistral
+            min_completeness: 85
+          - doc_id: 3
+            model: qwen
+            min_completeness: 80
 
   - name: "שירותים עירוניים"
     id: "cluster_municipal_services"
@@ -120,29 +190,59 @@ clusters:
           url: "https://service.city.gov.il"
 
     responsibilities:
-      - id: "res_sanitation_008"
+      - id: "res_sanitation"
         name: "ניהול תברואה וניקיון"
         category: "שירותים עירוניים"
         subcategory: "תברואה"
         frequency: "יומי"
         priority_level: "גבוהה"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: mistral
+            min_completeness: 80
+          - doc_id: 2
+            model: aya
+            min_completeness: 85
+          - doc_id: 3
+            model: qwen
+            min_completeness: 80
 
-      - id: "res_parks_maintenance_009"
+      - id: "res_parks_maintenance"
         name: "תחזוקת גנים וגינון"
         category: "שירותים עירוניים"
         subcategory: "גינון"
         frequency: "שבועי"
         priority_level: "בינונית"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: qwen
+            min_completeness: 80
+          - doc_id: 2
+            model: mistral
+            min_completeness: 85
+          - doc_id: 3
+            model: aya
+            min_completeness: 80
 
-      - id: "res_infrastructure_010"
+      - id: "res_infrastructure"
         name: "תחזוקת תשתיות (כבישים, מדרכות)"
         category: "שירותים עירוניים"
         subcategory: "תשתיות"
         frequency: "לפי צורך"
         priority_level: "גבוהה"
         data_completeness: "full"
+        documents:
+          - doc_id: 1
+            model: mistral
+            min_completeness: 80
+          - doc_id: 2
+            model: qwen
+            min_completeness: 85
+          - doc_id: 3
+            model: aya
+            min_completeness: 80
 
 statistics:
   total_responsibilities: 10
